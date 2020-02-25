@@ -163,12 +163,8 @@ public class Splitter implements Serializable {
                     break;
                 }
                 case 2: {
-                    try {
-                        addAnExpense(reader);
-                        recalculateDebts();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    addAnExpense(reader);
+                    recalculateDebts();
                     break;
                 }
                 case 3: {
