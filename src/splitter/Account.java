@@ -17,13 +17,8 @@ public class Account implements Serializable
     public Account(String login, String password, BufferedReader reader) {
         this.login = login;
         this.password = password;
-        debts = new ArrayList<Debt>(5);
-        try {
-            this.name = enterName(reader);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Input stream wasn't closed");
-        }
+        debts = new ArrayList<>(5);
+        this.name = enterName(reader);
     }
 
     //for test users
@@ -31,7 +26,7 @@ public class Account implements Serializable
         this.login = login;
         this.password = password;
         this.name = name;
-        debts = new ArrayList<Debt>(5);
+        debts = new ArrayList<>(5);
     }
 
     public String getLogin() {
@@ -84,7 +79,7 @@ public class Account implements Serializable
         return name;
     }
 
-    private String enterName(BufferedReader reader) throws IOException {
+    private String enterName(BufferedReader reader){
         String name = null;
         try {
             System.out.println("Enter your name: ");

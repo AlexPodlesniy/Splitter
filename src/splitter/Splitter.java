@@ -48,11 +48,11 @@ public class Splitter implements Serializable {
     }
 
     public void fillWithTestAccounts() {
-        accounts.add(new Account("Alex", "1", "Alexander"));
-        accounts.add(new Account("Kate", "2", "Katerine"));
-        accounts.add(new Account("Max", "3", "Max"));
+        accounts.add(new Account("Alex", "1", "Alex"));
+        accounts.add(new Account("Kate", "2", "Kate"));
+        accounts.add(new Account("Lena", "3", "Lena"));
         accounts.add(new Account("John", "4", "John"));
-        accounts.add(new Account("Ann", "5", "Ann"));
+        accounts.add(new Account("Rick", "5", "Rick"));
         System.out.println("Test accounts:");
         for (Account acc : accounts) {
             System.out.printf("login: %s   password:%s\n", acc.getLogin(), acc.getPassword());
@@ -198,8 +198,13 @@ public class Splitter implements Serializable {
     }
 
     private static void printBalance(Account user) {
-        for (Debt debt : user.getDebts()) {
-            System.out.printf("You owe %s %.2f simoleons\n", debt.getCreditor(), debt.getValue());
+        if (user.getDebts().isEmpty()) {
+            System.out.println("You have no debts.");
+        }
+        else {
+            for (Debt debt : user.getDebts()) {
+                System.out.printf("You owe %s %.2f simoleons\n", debt.getCreditor(), debt.getValue());
+            }
         }
     }
 
@@ -222,7 +227,7 @@ public class Splitter implements Serializable {
 
     //ввод неотрицательного вещественного числа
     private double readDouble(BufferedReader reader) throws IOException{
-        double result = 0.0;
+        double result;
         try {
             result = Double.parseDouble(reader.readLine());
         } catch (NumberFormatException e) {
@@ -238,8 +243,8 @@ public class Splitter implements Serializable {
 
     //Возвращает лист займов
     private ArrayList<Debt> getDebts(BufferedReader reader, double value) throws IOException {
-        ArrayList<Account> borrowers = null;
-        ArrayList<Account> accountList = new ArrayList<Account>(accounts);
+        ArrayList<Account> borrowers;
+        ArrayList<Account> accountList = new ArrayList<>(accounts);
 
         //определяем пользователей, учавствующих в трате
         System.out.print("If all members are involved in expense type \"1\", else type any other character: ");
@@ -252,9 +257,9 @@ public class Splitter implements Serializable {
         }
         System.out.println("Involved persons: " + borrowers);
 
-        ArrayList<Debt> debts = formDebtsList(borrowers, value, reader);
 
-        return debts;
+
+        return formDebtsList(borrowers, value, reader);
     }
 
     //распечатывает меню выбора заемщиков
@@ -406,6 +411,7 @@ public class Splitter implements Serializable {
         System.out.println("\nSelect creditor:");
         System.out.println("Selection\tCreditor\tDebt");
         printMany("-", 50);
+        System.out.println("\t0\t\tExit");
         for(int i = 0; i < user.getDebts().size(); i++) {
             Debt debt = user.getDebts().get(i);
             Account creditor = debt.getCreditor();
@@ -414,10 +420,16 @@ public class Splitter implements Serializable {
         System.out.print("\nType selection number: ");
         int index;
         while(true) {
-            index = Integer.parseInt(reader.readLine()) - 1;
-            if (index >= 0 && index < user.getDebts().size())
-                break;
-            System.out.print("Wrong selection number, try again: ");
+            try {
+                index = Integer.parseInt(reader.readLine()) - 1;
+                if (index == -1) {
+                    return;
+                } else if (index >= 0 && index < user.getDebts().size())
+                    break;
+                System.out.print("Wrong selection number, try again: ");
+            } catch (NumberFormatException e) {
+                System.out.print("It isn't a number, try again: ");
+            }
         }
         Debt debt = user.getDebts().get(index);
         if (debt.getValue() <= 0.0)
