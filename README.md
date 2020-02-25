@@ -11,6 +11,7 @@ Splitter - моя попытка решить эту проблему. Тут н
   2. Качаете JDK последней версии (у меня вроде 11.0.6)
   3. Переходите в терминале в корневую папку проекта (<yourPath>/Splitter/)
   4. Вводите: $ java -classpath ./out/production/Splitter/ splitter.Splitter
+  5. Если не получается, почитайте тут: https://javarush.ru/groups/posts/2318-kompiljacija-v-java
   
   
 Как пользоваться:
